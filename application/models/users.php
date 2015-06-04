@@ -77,45 +77,6 @@ Class Users extends CI_Model
 		$this->db->insert('user', $data);
 	}
 
-	function emailExists($email) {
-		$this->db->select('id');
-		$this->db->from('user_visitors');
-		$this->db->where('email', $email);
-		$query = $this->db->get();
-
-		if($query->num_rows() > 0) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	function registerVisitor($data) {
-		$success = false;
-		if($this->db->insert('user_visitors', $data)) {
-			$success = true;
-		}
-		return $success;
-	}
-
-	function loginVisitor($email,$password) {
-		$this->db->select('*');
-		$this->db->from('user_visitors');
-		$this->db->where('email', $email);
-		$this->db->where('password', md5($password));
-		$this->db->limit(1);
-
-		$query = $this->db->get();
-
-		if($query->num_rows() == 1) {
-			return $query->result();
-		}
-		else {
-			return false;
-		}
-	}
-
 	function get_all_by_role($role)
 	{
 		$user = array();

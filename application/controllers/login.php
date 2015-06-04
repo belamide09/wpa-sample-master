@@ -22,8 +22,6 @@ class Login extends CI_Controller {
 		    'title' => 'Sign in',
 		);
 
-		$data['username'] = '';
-		$data['password'] = '';
 		$this->load->library('form_validation');
 		
 		if($this->input->post('username')){
@@ -31,8 +29,6 @@ class Login extends CI_Controller {
 
 			$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|callback_check_database');
-			$data['username'] = $this->input->post('username');
-			$data['password'] = $this->input->post('password');			
 
 			if($this->form_validation->run() == true) {
 				redirect('/', 'refresh');
@@ -55,28 +51,14 @@ class Login extends CI_Controller {
 				$sess_array = array(
 				'id' => $row->id,
 				'role' => $row->role,
-				'username' => $row->name,
-				'type' => 'personel'
+				'username' => $row->name
 				);
 				$this->session->set_userdata('logged_in', $sess_array);
 			}
 			return true;
 		}else {
-			$loginVisitor = $this->users->loginVisitor($username,$password);
-			if($loginVisitor) {
-				$loginVisitor = $loginVisitor[0];
-				$sess_array = array(
-					'id' => $loginVisitor->id,
-					'role' => 0,
-					'username' => $loginVisitor->email,
-					'type' => 'visitor'
-					);
-				$this->session->set_userdata('logged_in', $sess_array);
-				return true;
-			} else {
-				$this->form_validation->set_message('check_database', 'Invalid username or password');
-				return false;
-			}	
+			$this->form_validation->set_message('check_database', 'Invalid username or password');
+			return false;
 		}
 	}
 

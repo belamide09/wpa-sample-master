@@ -17,9 +17,9 @@ class User extends CI_Controller {
 		$this->load->library('template');
 	}
 
-
 	public function register()
 	{
+		$this->load->helper(array('form'));
 		$this->load->library('form_validation');
 		$collectors = $this->users->get_all_by_role(3);
 		$collectorsOpt = '';
@@ -33,10 +33,8 @@ class User extends CI_Controller {
 		    'title' => 'Add new user',
 		    'collectorsOpt' => $collectorsOpt
 		);
-		if($this->input->post('username') && $this->input->post('password') && $this->input->post('role')){
-			$this->load->helper(array('form'));
-			$this->load->library('form_validation');
 
+		if($this->input->post('username') && $this->input->post('password') && $this->input->post('role')){
 
 			$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean|callback_check_exists');
 			$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
